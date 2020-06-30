@@ -76,11 +76,6 @@ winlogbeat.event_logs:
   - name: WEC7-Privilege-Use
   - name: WEC7-Terminal-Services
 
-#-------------------- Logstash output -------------------
-#output.logstash:
-  # The Logstash hosts
-#  hosts: ["10.10.98.20:5044"]
-
 #----------------------------- Kafka output --------------------------------
 output.kafka:
   # initial brokers for reading cluster metadata
