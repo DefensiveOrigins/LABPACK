@@ -35,7 +35,7 @@ Set-GPRegistryValue -Name "Windows Event Forwarding" -Key HKEY_LOCAL_MACHINE\SOF
 Get-GPRegistryValue -Name "Windows Event Forwarding" -Key HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\EventForwarding\SubscriptionManager
 New-GPLink -Name "Windows Event Forwarding” -Target "dc=labs,dc=local" -LinkEnabled Yes
 Get-GPOReport -Name "Windows Event Forwarding" -ReportType HTML -Path "c:\Labs\GPOReport-Windows-Event-Forwarding.html"
-wecutil qc -Force -Confirm:$false
+wecutil qc /q
 net stop wecsvc
 wevtutil um C:\windows\system32\CustomEventChannels.man
 cp C:\LABS\LabPack\LABPACK-master\Lab-WEF-Palantir\windows-event-channels\CustomEventChannels.* C:\windows\System32\
