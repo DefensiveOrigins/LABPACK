@@ -34,7 +34,7 @@ Get-GPRegistryValue -Name "Windows Event Forwarding" -Key HKEY_LOCAL_MACHINE\SOF
 Set-GPRegistryValue -Name "Windows Event Forwarding" -Key HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\EventForwarding\SubscriptionManager -ValueName "1" -Type String -Value "Server=http://dc01.labs.local:5985/wsman/SubscriptionManager/WEC,Refresh=60"
 Get-GPRegistryValue -Name "Windows Event Forwarding" -Key HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\EventForwarding\SubscriptionManager
 New-GPLink -Name "Windows Event Forwarding” -Target "dc=labs,dc=local" -LinkEnabled Yes
-Get-GPOReport -Name "Windows Event Forwarding" -ReportType HTML -Path "c:\Labs\GPOReport-Windows-Event-Forwarding.html" & "c:\Labs\GPOReport-Windows-Event-Forwarding.html"
+Get-GPOReport -Name "Windows Event Forwarding" -ReportType HTML -Path "c:\Labs\GPOReport-Windows-Event-Forwarding.html"
 wecutil qc -Force -Confirm:$false
 net stop wecsvc
 wevtutil um C:\windows\system32\CustomEventChannels.man
