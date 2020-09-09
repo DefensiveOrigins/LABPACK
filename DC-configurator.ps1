@@ -1,10 +1,10 @@
 cd c:\labs
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-Invoke-WebRequest –URI https://download.sysinternals.com/files/Sysmon.zip -OutFile “Sysmon.zip” 
-Invoke-WebRequest –URI https://artifacts.elastic.co/downloads/beats/winlogbeat/winlogbeat-7.7.1-windows-x86_64.zip -OutFile “WinLogBeat.zip” 
-Invoke-WebRequest –URI https://github.com/olafhartong/sysmon-modular/archive/master.zip -OutFile “sysmon-modular.zip” 
-Invoke-WebRequest –URI https://github.com/palantir/windows-event-forwarding/archive/master.zip -OutFile “palantir.zip”
-Invoke-WebRequest –URI https://github.com/DefensiveOrigins/LABPACK/archive/master.zip -OutFile LabPack.zip
+Invoke-WebRequest -URI https://download.sysinternals.com/files/Sysmon.zip -OutFile "Sysmon.zip" 
+Invoke-WebRequest -URI https://artifacts.elastic.co/downloads/beats/winlogbeat/winlogbeat-7.7.1-windows-x86_64.zip -OutFile "WinLogBeat.zip"
+Invoke-WebRequest -URI https://github.com/olafhartong/sysmon-modular/archive/master.zip -OutFile "sysmon-modular.zip" 
+Invoke-WebRequest -URI https://github.com/palantir/windows-event-forwarding/archive/master.zip -OutFile "palantir.zip"
+Invoke-WebRequest -URI https://github.com/DefensiveOrigins/LABPACK/archive/master.zip -OutFile LabPack.zip
 Expand-Archive .\Sysmon.zip 
 Expand-Archive .\sysmon-modular.zip 
 Expand-Archive .\palantir.zip 
@@ -20,20 +20,20 @@ cp C:\LABS\sysmon-modular\sysmon-modular-master\sysmonconfig.xml c:\labs\sysmon\
 cd \\dc01\labs\sysmon\
 ./sysmon64.exe -accepteula -i sysmonconfig.xml
 Get-WinEvent -LogName Microsoft-Windows-Sysmon/Operational
-Import-GPO -Path "\\dc01\LABS\LabPack\LABPACK-master\Lab-GPOs\Enhanced-WS-Auditing\" -BackupGpoName "WS-Enhanced-Auditing" -CreateIfNeeded -TargetName "WS-Enhanced-Auditing" -Server DC01
-Import-GPO -Path "\\dc01\LABS\LabPack\LABPACK-master\Lab-GPOs\Enhanced-DC-Auditing\" -BackupGpoName "DC-Enhanced-Auditing" -CreateIfNeeded -TargetName "DC-Enhanced-Auditing" -Server DC01
+Import-GPO -Path "\\dc01\LABS\LabPack\LABPACK-master\Lab-GPOs\Enhanced-WS-Auditing\" -BackupGpoName "Enhanced WS Auditing" -CreateIfNeeded -TargetName "WS-Enhanced-Auditing" -Server DC01
+Import-GPO -Path "\\dc01\LABS\LabPack\LABPACK-master\Lab-GPOs\Enhanced-DC-Auditing\" -BackupGpoName "Enhanced DC Auditing" -CreateIfNeeded -TargetName "DC-Enhanced-Auditing" -Server DC01
 Import-GPO -Path "\\dc01\LABS\LabPack\LABPACK-master\Lab-GPOs\Enable-WinRM-and-RDP\" -BackupGpoName "Enable-WinRM-and-RDP" -CreateIfNeeded -TargetName "Enable-WinRM-and-RDP" -Server DC01
 New-GPLink -Name "WS-Enhanced-Auditing" -Target "dc=labs,dc=local" -LinkEnabled Yes
 New-GPLink -Name "DC-Enhanced-Auditing" -Target "ou=Domain Controllers,dc=labs,dc=local" -LinkEnabled Yes
-New-GPLink -Name "Enable-WinRM-and-RDP” -Target "dc=labs,dc=local" -LinkEnabled Yes
+New-GPLink -Name "Enable-WinRM-and-RDP" -Target "dc=labs,dc=local" -LinkEnabled Yes
 Get-GPOReport -Name "Enable-WinRM-and-RDP" -ReportType HTML -Path "c:\Labs\GPOReport-Enable-WinRM-and-RDP.html"
 Get-GPOReport -Name "WS-Enhanced-Auditing" -ReportType HTML -Path "c:\Labs\GPOReport-WS-Enhanced-Auditing.html" 
 Get-GPOReport -Name "DC-Enhanced-Auditing" -ReportType HTML -Path "c:\Labs\GPOReport-DC-Enhanced-Auditing.html"
-Import-GPO -Path “\\dc01\LABS\LabPack\LABPACK-master\Lab-GPOs\Windows Event Forwarding” -BackupGpoName "Windows Event Forwarding” -CreateIfNeeded -TargetName "Windows Event Forwarding" -Server DC01
+Import-GPO -Path "\\dc01\LABS\LabPack\LABPACK-master\Lab-GPOs\Windows Event Forwarding" -BackupGpoName "Windows Event Forwarding" -CreateIfNeeded -TargetName "Windows Event Forwarding" -Server DC01
 Get-GPRegistryValue -Name "Windows Event Forwarding" -Key HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\EventForwarding\SubscriptionManager
 Set-GPRegistryValue -Name "Windows Event Forwarding" -Key HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\EventForwarding\SubscriptionManager -ValueName "1" -Type String -Value "Server=http://dc01.labs.local:5985/wsman/SubscriptionManager/WEC,Refresh=60"
 Get-GPRegistryValue -Name "Windows Event Forwarding" -Key HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\EventLog\EventForwarding\SubscriptionManager
-New-GPLink -Name "Windows Event Forwarding” -Target "dc=labs,dc=local" -LinkEnabled Yes
+New-GPLink -Name "Windows Event Forwarding" -Target "dc=labs,dc=local" -LinkEnabled Yes
 Get-GPOReport -Name "Windows Event Forwarding" -ReportType HTML -Path "c:\Labs\GPOReport-Windows-Event-Forwarding.html"
 wecutil qc /q
 net stop wecsvc
