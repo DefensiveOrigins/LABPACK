@@ -22,7 +22,7 @@ winlogbeat.event_logs:
     ignore_older: 30m
     event_id: 4103, 4104
   - name: Windows PowerShell
-    event_id: 400,600
+    event_id: 200,400,500,501,600,800
     ignore_older: 30m
   - name: ForwardedEvents
     ignore_older: 30m
